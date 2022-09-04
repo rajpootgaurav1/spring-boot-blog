@@ -2,6 +2,7 @@ package com.springboot.blog.service.impl;
 
 import com.springboot.blog.dto.PostDto;
 import com.springboot.blog.entity.Post;
+import com.springboot.blog.exception.ResourceNotFoundException;
 import com.springboot.blog.repository.PostRepository;
 import com.springboot.blog.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,7 @@ public class PostServiceImpl implements PostService {
         Post newPost = postRepository.save(post);
 
         //convert entity to dto
-        PostDto postResponse = mapToDTO(newPost);
-        return postResponse;
+        return  mapToDTO(newPost);
     }
 
     @Override
@@ -37,6 +37,26 @@ public class PostServiceImpl implements PostService {
         return  posts.stream().map(post -> mapToDTO(post)).collect(Collectors.toList());
 
     }
+
+    @Override
+    public PostDto getPostById(long id) {
+        Post post = postRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Post","id",String.valueOf(id)));
+        return mapToDTO(post);
+    }
+
+    @Override
+    public PostDto updatePost(PostDto postDto, long id) {
+        //get post by id from database
+        Post post = postRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Post","id",String.valueOf(id)));
+        //update the post
+        post.setTitle(postDto.getTitle());
+        post.setDescription(postDto.getDescription());
+        post.setContent(postDto.getContent());
+        ///save the updated post in database
+        Post newPost = postRepository.save(post);
+        return mapToDTO(newPost);
+    }
+
     //entity to dto
     private PostDto mapToDTO(Post post){
         PostDto postDto =new PostDto();
