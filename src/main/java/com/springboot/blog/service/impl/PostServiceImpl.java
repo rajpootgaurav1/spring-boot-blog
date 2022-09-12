@@ -89,6 +89,7 @@ public class PostServiceImpl implements PostService {
 
     //entity to dto
     private PostDto mapToDTO(Post post){
+        //mapper object will map one object into ther type internally
         PostDto postDto = mapper.map(post, PostDto.class);
 //        PostDto postDto =new PostDto();
 //        postDto.setId(post.getId());
