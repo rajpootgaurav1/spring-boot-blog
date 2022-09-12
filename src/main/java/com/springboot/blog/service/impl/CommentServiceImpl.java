@@ -8,6 +8,7 @@ import com.springboot.blog.exception.ResourceNotFoundException;
 import com.springboot.blog.repository.CommentRepository;
 import com.springboot.blog.repository.PostRepository;
 import com.springboot.blog.service.CommentService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private PostRepository postRepository;
+    @Autowired
+    private ModelMapper mapper;
 
     @Override
     public CommentDto createComment(long postId, CommentDto commentDto) {
@@ -95,20 +98,22 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private CommentDto maptoDto(Comment comment){
-        CommentDto commentDto = new CommentDto();
-        commentDto.setId(comment.getId());
-        commentDto.setName(comment.getName());
-        commentDto.setEmail(comment.getEmail());
-        commentDto.setBody(comment.getBody());
+        CommentDto commentDto = mapper.map(comment, CommentDto.class);
+//        CommentDto commentDto = new CommentDto();
+//        commentDto.setId(comment.getId());
+//        commentDto.setName(comment.getName());
+//        commentDto.setEmail(comment.getEmail());
+//        commentDto.setBody(comment.getBody());
         return commentDto;
     }
 
     private Comment mapToEntity(CommentDto commentDto){
-        Comment comment = new Comment();
-//        comment.setId(commentDto.getId());
-        comment.setName(commentDto.getName());
-        comment.setEmail(commentDto.getEmail());
-        comment.setBody(commentDto.getBody());
+        Comment comment = mapper.map(commentDto,Comment.class);
+//        Comment comment = new Comment();
+////        comment.setId(commentDto.getId());
+//        comment.setName(commentDto.getName());
+//        comment.setEmail(commentDto.getEmail());
+//        comment.setBody(commentDto.getBody());
         return comment;
     }
 }
