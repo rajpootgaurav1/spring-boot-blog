@@ -1,8 +1,8 @@
 package com.springboot.blog.config;
 
 import com.springboot.blog.security.CustomUserDetailsService;
-//import com.springboot.blog.security.JwtAuthenticationEntryPoint;
-//import com.springboot.blog.security.JwtAuthenticationFilter;
+import com.springboot.blog.security.JwtAuthenticationEntryPoint;
+import com.springboot.blog.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,13 +32,13 @@ public class SecurityConfig {
     @Autowired
     private CustomUserDetailsService userDetailsService;
 
-//    @Autowired
-//    private JwtAuthenticationEntryPoint authenticationEntryPoint;
-//
-//    @Bean
-//    public JwtAuthenticationFilter jwtAuthenticationFilter(){
-//        return  new JwtAuthenticationFilter();
-//    }
+    @Autowired
+    private JwtAuthenticationEntryPoint authenticationEntryPoint;
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter(){
+        return  new JwtAuthenticationFilter();
+    }
 
     @Bean
     PasswordEncoder passwordEncoder(){
@@ -50,7 +50,7 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .exceptionHandling()
-//                .authenticationEntryPoint(authenticationEntryPoint)
+                .authenticationEntryPoint(authenticationEntryPoint)
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -66,7 +66,7 @@ public class SecurityConfig {
                         .anyRequest()
                         .authenticated()
                 );
-//        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
