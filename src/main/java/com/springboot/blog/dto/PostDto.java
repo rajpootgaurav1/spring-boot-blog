@@ -1,12 +1,13 @@
 package com.springboot.blog.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Set;
-
+@Schema(description = " this is for the Post")
 @Data
 public class PostDto {
     private long id;
