@@ -4,6 +4,8 @@ import com.springboot.blog.dto.PostDto;
 import com.springboot.blog.dto.PostResponse;
 import com.springboot.blog.service.PostService;
 import com.springboot.blog.utils.AppConstants;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,7 +15,8 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/posts")
+@RequestMapping("api/v1/posts")
+@Tag(name = "Post API", description = "Rest api for all the Post")
 public class PostController {
 
     private PostService postService;
@@ -23,6 +26,7 @@ public class PostController {
     }
     ///create blog post rest api
     @PostMapping
+    @Operation(summary = "create post api", description = "use this endpoint for creating a new Post")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PostDto> createPost(@Valid @RequestBody PostDto postDto){
         return  new ResponseEntity<>(postService.createPost(postDto), HttpStatus.CREATED);
